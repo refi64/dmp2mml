@@ -1,0 +1,52 @@
+name:                dmp2mml
+version:             0.1.0.0
+github:              refi64/dmp2mml
+license:             MPL-2.0
+author:              Ryan Gonzalez
+maintainer:          "rymg19+github@gmail.com"
+copyright:           "2021 Ryan Gonzalez"
+
+extra-source-files:
+- README.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+category:            Music
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/refi64/dmp2mml#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- binary-parsers
+- boxes
+- bytestring
+- fixed-vector
+- optparse-applicative
+
+library:
+  source-dirs: src
+
+executables:
+  dmp2mml:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - dmp2mml
+
+tests:
+  dmp2mml-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - dmp2mml
