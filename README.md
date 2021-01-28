@@ -7,7 +7,9 @@ dmp2mml converts DefleMask .DMP preset files into
 
 ### Requirements
 
-- [Haskell Platform.](https://www.haskell.org/platform/)
+This project uses [Stack](https://docs.haskellstack.org/en/stable/README/)
+for building. You'll also need a C compiler and linker, which are used by Stack
+for setup and compilation.
 
 ### Building
 
