@@ -15,6 +15,8 @@ import Data.Word
 
 import DMP2MML.FMInstrument
 
+data Version = V0 | V9 | V11
+
 parseFMOperator = do
   _mult <- BP.anyWord8
   _tl <- BP.anyWord8
@@ -42,12 +44,35 @@ parseFM = do
   _operators <- replicateM parseFMOperator
   return FMInstrument{..}
 
-dmpParser = do
-  BP.word8 dmpFileVersion <|> fail "Wrong DMP file version, try re-saving it"
+parseVersion = do
+  version <- BP.anyWord8
+  case version of
+    0 -> return V0
+    9 -> return V9
+    11 -> return V11
+    _ ->
+      fail $ "Unsupported DMP version " ++ show version ++ ", try re-saving it"
+
+parseGenesisSystem =
   BP.word8 genesisSystem <|> fail "Unsupported system"
-  BP.word8 fmInstrumentMode <|> fail "Unexpected instrument mode"
-  parseFM
   where
-    dmpFileVersion = 11
     genesisSystem = 2
+
+parseInstrumentMode =
+  BP.word8 fmInstrumentMode <|> fail "Unsupported instrument mode"
+  where
     fmInstrumentMode = 1
+
+parseVersionHeader V0 = return ()
+parseVersionHeader V9 = do
+  parseInstrumentMode
+  -- The next byte's meaning is unknown, but it's usually 0.
+  BP.anyWord8
+  return ()
+parseVersionHeader V11 = do
+  parseGenesisSystem
+  parseInstrumentMode
+
+dmpParser = do
+  parseVersion >>= parseVersionHeader
+  parseFM

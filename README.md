@@ -1,6 +1,6 @@
 # dmp2mml
 
-dmp2mml converts DefleMask 0.12+ .DMP preset files into
+dmp2mml converts DefleMask .DMP preset files into
 [ctrmml](https://github.com/superctr/ctrmml) FM instrument syntax.
 
 ## Compiling
@@ -52,12 +52,11 @@ This ignores the LFO and LFO2 parameters in the file.
 
 ## FAQ
 
-### I get `Wrong DMP file version, try re-saving it`
+### I get `Unsupported DMP version <VERSION>, try re-saving it`
 
-Several of DefleMask's own presets are saved in an old format (version 9) for
-which documentation isn't available yet. Although I may add support at some
-point in the future, at the moment you need to convert them to version 11. This
-is easily done by just opening the preset in DefleMask 0.12+ and re-saving it.
+dmp2mml supports .DMP files version 0, 9, and 11. If the file is a different
+verison, you can open the preset in a recent DefleMask version and re-save it,
+which should convert it to version 11.
 
 ## Links
 
