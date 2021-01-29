@@ -38,7 +38,7 @@ instrumentFields =
   , Field "FB" _fb
   ]
 
-printInstrument id fm =
+printInstrument idNumber description fm =
   let is = printFields instrumentFields [fm]
       os = printFields opFields . toList $ _operators fm
 
@@ -58,9 +58,14 @@ printInstrument id fm =
           , BX.emptyBox (operatorRows - 1) 0
           ]
 
+      header = BX.text $ "@" ++ show idNumber ++ " fm"
+
+      descriptionBox = fmap (BX.text . (" ; " ++)) description
+      addDescription = maybe id (flip (<+>)) descriptionBox
+
       definition = BX.hsep 1 BX.bottom $ commentCol : firstCols ++ restCols
    in BX.vcat
         BX.top
-        [ BX.text $ "@" ++ show id ++ " fm"
+        [ addDescription header
         , BX.nullBox <+> definition
         ]
