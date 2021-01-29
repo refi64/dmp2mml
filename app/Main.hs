@@ -12,6 +12,8 @@ import DMP2MML.DMPParser
 import DMP2MML.MMLPrinter
 import qualified Data.Binary.Parser as BP
 import qualified Data.ByteString as BS
+import Data.Char
+import Data.List
 import Options.Applicative
 import System.Exit
 import qualified Text.PrettyPrint.Boxes as BX
@@ -28,13 +30,16 @@ dmp2mml = do
         <> help "The FM instrument ID to print"
   return DMP2MML{..}
 
+trimTrailingWhitespace = unlines . map (dropWhileEnd isSpace) . lines
+
 run DMP2MML{fileOpt, idOpt} = do
   dmp <-
     BS.readFile fileOpt
       >>= ( BP.parseOnly dmpParser
               >>> either (die . ("Failed to parse dmp file: " ++)) return
           )
-  BX.printBox $ printInstrument idOpt dmp
+  let text = BX.render $ printInstrument idOpt dmp
+  putStrLn $ trimTrailingWhitespace text
 
 main :: IO ()
 main = run =<< execParser opts
